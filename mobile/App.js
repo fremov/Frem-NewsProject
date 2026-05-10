@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // ВАЖНО: Если запускаешь на реальном телефоне, замени '127.0.0.1'
 // на локальный IP твоего компьютера (например, '192.168.1.5')
-const API_URL = 'http://192.168.0.137:8000/news';
+const API_URL = 'http://5.35.93.59:8000/news';
 
 export default function App() {
     const [news, setNews] = useState([]);
