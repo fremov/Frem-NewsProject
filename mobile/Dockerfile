@@ -1,30 +1,25 @@
-﻿# Используем Node.js
-FROM node:20-slim
+﻿FROM node:20-slim
 
 WORKDIR /app
 
-# Устанавливаем системные зависимости для Expo
-RUN apt-get update && apt-get install -y \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-# Копируем package.json
+# Копируем конфиги
 COPY package*.json ./
 
-# Устанавливаем зависимости
+# Устанавливаем основные зависимости
 RUN npm install
 
-# Устанавливаем expo-cli глобально
+# ПРЕДУСТАНОВКА NGROK (чтобы не было вопроса в консоли)
+RUN npm install -g @expo/ngrok@^4.1.0
+
+# Устанавливаем expo-cli
 RUN npm install -g expo-cli
 
-# Копируем весь проект
 COPY . .
 
-# Экспонируем порты:
-# 19000 - Expo Packager
-# 19001 - Metro Bundler
-# 19002 - Expo Developer Tools
-EXPOSE 19000 19001 19002 8081
+EXPOSE 8081 19000 19001 19002
 
-# Запускаем приложение в режиме туннеля (чтобы телефон видел его через интернет)
-CMD ["npx", "expo", "start", "--tunnel"]
+# Используем флаг --non-interactive на всякий случай
+CMD ["npx", "expo", "start", "--tunnel", "--non-interactive"]
