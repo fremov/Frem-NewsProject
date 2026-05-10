@@ -24,7 +24,7 @@ export default function Home() {
 
     useEffect(() => {
         // Укажи здесь адрес своего бэкенда
-        fetch('http://127.0.0.1:8000/news')
+        fetch('http://5.35.93.59:8000/news')
             .then((res) => res.json())
             .then((data) => {
                 setNews(data);
