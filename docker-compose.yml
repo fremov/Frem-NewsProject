@@ -1,20 +1,20 @@
 ﻿version: '3.8'
 
 services:
-  # Бэкенд на FastAPI
   backend:
     build: ./backend
+    container_name: news-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app # Чтобы база данных SQLite сохранялась на сервере
+      - ./backend/news.db:/app/news.db # Пробрасываем файл базы
     restart: always
 
-  # Фронтенд на Next.js
   frontend:
     build: ./frontend
+    container_name: news-frontend
     ports:
       - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://your-server-ip:8000
+    depends_on:
+      - backend
     restart: always
