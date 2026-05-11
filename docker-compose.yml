@@ -4,12 +4,13 @@ services:
   backend:
     build: ./backend
     container_name: news-backend
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     ports:
       - "8000:8000"
     volumes:
       - ./backend/news.db:/app/news.db # Пробрасываем файл базы
     restart: always
-
   frontend:
     build: ./frontend
     container_name: news-frontend
