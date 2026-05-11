@@ -10,29 +10,37 @@ Base.metadata.create_all(bind=engine)
 def run_sync_scraper():
     db = SessionLocal()
 
-    # Список всех твоих парсеров
-    scrapers = [
-        SpecificSiteScraper("https://www.ign.com/pc?filter=popular"),
-        HabrScraper("https://habr.com/ru/articles/")
-    ]
+    try:
+        scrapers = [
+            SpecificSiteScraper("https://www.ign.com/pc?filter=popular"),
+            HabrScraper("https://habr.com/ru/articles/")
+        ]
 
-    for scraper in scrapers:
-        logger.info(f"--- Запуск парсера для: {scraper.base_url} ---")
-        articles = scraper.parse(db_session=db)                                             
-        if articles:
-            for item in articles:
-                new_entry = NewsItem(
-                    title=item['title'],
-                    content=item['content'],
-                    source_url=item['source_url'],
-                    source=item['source']
-                )
-                db.add(new_entry)
+        for scraper in scrapers:
+            logger.info(f"--- Запуск парсера для: {scraper.base_url} ---")
 
-            db.commit()
-            print(f"Добавлено новых новостей: {len(articles)}")
+            try:
+                articles = scraper.parse(db_session=db)
 
-    db.close()
+                if articles:
+                    for item in articles:
+                        new_entry = NewsItem(
+                            title=item["title"],
+                            content=item["content"],
+                            source_url=item["source_url"],
+                            source=item["source"]
+                        )
+                        db.add(new_entry)
+
+                    db.commit()
+                    print(f"Добавлено новых новостей: {len(articles)}")
+
+            except Exception as e:
+                db.rollback()
+                logger.exception(f"Ошибка при работе парсера {scraper.base_url}: {e}")
+
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
