@@ -31,7 +31,7 @@ def process_news_text(raw_text):
         # 1. Попробуем использовать полное имя модели "models/gemini-1.5-flash"
         # 2. В новом SDK параметры передаются именно так
         response = client.models.generate_content(
-            model="models/gemini-1.5-flash",
+            model="models/gemini-flash-latest",
             contents=f"{prompt}\n\nТекст: {raw_text}"
         )
 
