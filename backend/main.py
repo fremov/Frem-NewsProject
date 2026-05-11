@@ -33,9 +33,13 @@ def get_db():
 # ГЛАВНАЯ СТРАНИЦА (HTML)
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request, db: Session = Depends(get_db)):
-    # Берем последние 30 новостей
     news = db.query(NewsItem).order_by(NewsItem.created_at.desc()).limit(30).all()
-    return templates.TemplateResponse("index.html", {"request": request, "news": news})
+    # Измените на это:
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"news": news}
+    )
 
 # API для получения JSON (оставим для мобилки или тестов)
 @app.get("/api/news", response_model=List[NewsSchema])
