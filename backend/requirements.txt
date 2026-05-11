@@ -6,3 +6,4 @@ pydantic
 requests
 beautifulsoup4
 lxml
+deep-translator==1.11.4
