@@ -1,35 +1,12 @@
-﻿version: '3.8'
-
-services:
-  backend:
+﻿services:
+  app:
     build: ./backend
-    container_name: news-backend
-    environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/news.db:/app/news.db # Пробрасываем файл базы
+    container_name: news-app
     restart: always
-  frontend:
-    build: ./frontend
-    container_name: news-frontend
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    restart: always
-
-  mobile:
-    build: ./mobile
-    container_name: news-mobile
+      - "80:8000"
     volumes:
-      - ./mobile:/app
-      - /app/node_modules
-    ports:
-      - "8081:8081"
-      - "19000:19000"
-    environment:
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-    stdin_open: true
-    tty: true
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000

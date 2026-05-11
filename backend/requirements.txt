@@ -8,3 +8,5 @@ beautifulsoup4
 lxml
 deep-translator==1.11.4
 google-genai
+jinja2
+python-dotenv
