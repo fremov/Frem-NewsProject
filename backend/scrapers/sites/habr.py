@@ -1,6 +1,6 @@
 ﻿import time
 from scrapers.base import BaseScraper, logger
-
+from app.ai_utils import process_news_text
 
 class HabrScraper(BaseScraper):
     def parse_article_details(self, url):
@@ -67,6 +67,7 @@ class HabrScraper(BaseScraper):
                     continue  # Переходим к следующей новости в цикле, не добавляя в articles
 
                 if full_content and len(full_content) > 100:
+                    full_content = process_news_text(full_content)
                     articles.append({
                         "title": title,  # Оставляем как есть
                         "content": full_content,

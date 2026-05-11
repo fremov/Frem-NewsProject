@@ -4,6 +4,7 @@ import time
 from scrapers.base import BaseScraper, logger
 from app.utils import translate_to_russian
 import time
+from app.ai_utils import process_news_text
 
 # Пути для импорта BaseScraper
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -54,6 +55,7 @@ class SpecificSiteScraper(BaseScraper):
                 content_ru = translate_to_russian(content_en)
 
                 if content_ru:
+                    content_ru = process_news_text(content_ru)
                     articles.append({
                         "title": title_ru,
                         "content": content_ru,
